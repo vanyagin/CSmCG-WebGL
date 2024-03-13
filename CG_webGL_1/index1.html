@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGl test</title>
+</head>
+<body onload="start()">
+<canvas id="glcanvas" width="1000" height="700">
+    Your browser doesn't appear to support the HTML5
+</canvas>
+<script src = "gl-matrix.js"></script>
+<script id="shader-fs" type="x-shader/x-fragment">
+    varying lowp vec4 fragColor;
+    void main()
+    {
+        gl_FragColor = fragColor;
+    }
+</script>
+<script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec3 vertPosition;
+    attribute vec4 vertColor;
+
+    varying lowp vec4 fragColor;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    void main(void) {
+        gl_Position = vec4(vertPosition, 1.0);
+        fragColor = vertColor;
+    }
+</script>
+<script src = "index1.js"></script>
+</body>
+
+</html>
