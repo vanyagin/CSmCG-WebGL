@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGl test</title>
+</head>
+<body onload="start()">
+<canvas id="glcanvas" width="1000" height="700">
+    Your browser doesn't appear to support the HTML5
+</canvas>
+<script src = "gl-matrix.js"></script>
+<script id="shader-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    precision highp float;
+    #endif
+    varying vec3 vPos;
+    void main()
+    {
+        float k = 14.0;
+        int sum = int( vPos.x * k);
+        sum -= sum / 2 * 2;
+        if ( sum == 0 ) {
+            if (vPos.x <= 0.0) gl_FragColor = vec4(1);
+            else gl_FragColor = vec4(0, 1, 1, 1);
+            }
+        else {
+            if (vPos.x <= 0.0) gl_FragColor = vec4(0, 1, 1, 1);
+            else gl_FragColor = vec4(1);
+        }
+    }
+</script>
+<script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec3 vertPosition;
+    varying vec3 vPos;
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    void main(void) {
+        gl_Position = uPMatrix * uMVMatrix * vec4(vertPosition, 1.0);
+        vPos = vertPosition;
+    }
+</script>
+<script src = "index2.js"></script>
+</body>
+
+</html>
