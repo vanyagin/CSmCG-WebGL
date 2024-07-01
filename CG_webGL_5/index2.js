@@ -9,7 +9,7 @@ var cubeAngle = 0
 var podiumAngle = 0
 
 var stoneTexture, patternTexture, goldTexture, tex1, tex2, tex3
-var propDig = 1, propMat = 1, propCol = 1;
+var propDig = 0.9, propMat = 0.9, propCol = 0.9;
 
 var vertices = [
         // Front face
@@ -92,17 +92,17 @@ var images1  = ["images1/bronze.png", "images1/silver.png", "images1/gold.png", 
 
 
 function setupTextures(){
-
+  stoneTexture = gl.createTexture();
   tex3 = gl.createTexture();
-  setTexture([images1[5]], [tex3]);
+  setTexture([images[0],images[5]], [stoneTexture,tex3]);
 
-
+  patternTexture = gl.createTexture();
   tex2 = gl.createTexture();
-  setTexture([images1[4]], [tex2]);
+  setTexture([images1[1],images[4]], [patternTexture,tex2]);
 
-
+  goldTexture = gl.createTexture();
   tex1 = gl.createTexture();
-  setTexture([images1[3]], [tex1]);
+  setTexture([images[2],images[3]], [goldTexture,tex1]);
 }
 
 function setTexture(urls, textures) {
@@ -139,9 +139,11 @@ function handleTextureLoaded(image, texture) {
     }
 }
 
-function createTexture(texture0){
+function createTexture(texture0, texture1){
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture0);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, texture1);
 }
 
 function getShader(gl, id) {
@@ -279,25 +281,25 @@ function render(){
     createModel(6)
     //initNormMatrix()
     gl.uniform3fv(gl.getUniformLocation(shaderProgram,"uColor"),[1,1,1])
-    createTexture(tex3)
+    createTexture(stoneTexture, tex3)
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0)
 
 
     // Silver
     createModel(2)
-    gl.uniform3fv(gl.getUniformLocation(shaderProgram,"uColor"),[1.0,1.0,1.0])
-    createTexture(tex2)
+    gl.uniform3fv(gl.getUniformLocation(shaderProgram,"uColor"),[1,1,1])
+    createTexture(patternTexture, tex2)
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0)
 
     // Gold
     createModel(4)
     gl.uniform3fv(gl.getUniformLocation(shaderProgram,"uColor"),[1,1,1])
-    createTexture(tex1)
+    createTexture(goldTexture, tex1)
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0)
 
     createModel(4,2,4)
     gl.uniform3fv(gl.getUniformLocation(shaderProgram,"uColor"),[1,1,1])
-    createTexture(tex1)
+    createTexture(goldTexture, tex1)
     gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0)
 
     requestAnimationFrame(render)

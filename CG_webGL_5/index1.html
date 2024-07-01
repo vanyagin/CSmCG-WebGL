@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGl lab5</title>
+    <script src = "index1.js" type="module" defer></script>
+</head>
+<body>
+<canvas id="glcanvas" width="1000" height="700">
+    Your browser doesn't appear to support the HTML5
+</canvas>
+<script src = "gl-matrix.js"></script>
+<script id="shader-fs" type="x-shader/x-fragment">
+    #ifdef GL_ES
+    precision highp float;
+    #endif
+
+    uniform sampler2D uSampler0;
+    uniform sampler2D uSampler1;
+    uniform float uPropCol;
+    uniform float uPropMat;
+    uniform float uPropDig;
+
+    uniform vec3 uColor;
+    varying vec2 vTextureCoords;
+
+    void main() {
+        vec4 matTex = texture2D(uSampler0, vTextureCoords);
+        vec4 digTex = texture2D(uSampler1, vTextureCoords);
+        matTex.a *= uPropMat;
+        digTex.a *= uPropDig;
+        gl_FragColor = vec4((digTex.rgb * digTex.a + (matTex.rgb * matTex.a + uColor * (1.0 - matTex.a)) * (1.0 - digTex.a)),1.0);
+    }
+</script>
+<script id="shader-vs" type="x-shader/x-vertex">
+    precision highp float;
+    attribute vec3 aVertex;
+    attribute vec2 aTextureCoords;
+
+    uniform mat4 uModel;
+    uniform mat4 uProj;
+    uniform mat4 uView;
+
+    varying vec2 vTextureCoords;
+
+    void main() {
+        vec4 vertexPositionEye4 = (uView * uModel * vec4(aVertex, 1.0));
+        gl_Position = uProj * vertexPositionEye4;
+        vTextureCoords = aTextureCoords;
+    }
+</script>
+</body>
+
+</html>
